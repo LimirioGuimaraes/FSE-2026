@@ -2,14 +2,12 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
-# Pin Configuration - Model 2
 BIT_0 = 24
 BIT_1 = 8
 BIT_2 = 7
 MAIN_PED_BUTTON = 25
 CROSS_PED_BUTTON = 22
 
-# Interrupt flags
 main_ped_requested = False
 cross_ped_requested = False
 
@@ -27,16 +25,16 @@ def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     
-    # Output configuration
+    # Output
     GPIO.setup([BIT_0, BIT_1, BIT_2], GPIO.OUT)
     GPIO.output([BIT_0, BIT_1, BIT_2], GPIO.LOW)
     
-    # Input configuration (Pull-Down, active high)
+    # Input
     GPIO.setup([MAIN_PED_BUTTON, CROSS_PED_BUTTON], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     
-    # Interrupt configuration with 200ms debounce
-    GPIO.add_event_detect(MAIN_PED_BUTTON, GPIO.RISING, callback=main_ped_callback, bouncetime=200)
-    GPIO.add_event_detect(CROSS_PED_BUTTON, GPIO.RISING, callback=cross_ped_callback, bouncetime=200)
+    # 500ms debounce
+    GPIO.add_event_detect(MAIN_PED_BUTTON, GPIO.RISING, callback=main_ped_callback, bouncetime=500)
+    GPIO.add_event_detect(CROSS_PED_BUTTON, GPIO.RISING, callback=cross_ped_callback, bouncetime=500)
 
 def set_state(code):
     """Sends the 3-bit code to the corresponding GPIO pins"""
@@ -53,7 +51,6 @@ def state_machine():
         main_ped_requested = False
         start_time = time.time()
         while (time.time() - start_time) < 20.0:
-            # Green min 10s, max 20s
             if main_ped_requested and (time.time() - start_time) >= 10.0:
                 break
             time.sleep(0.1)
