@@ -13,12 +13,12 @@ cross_ped_requested = False
 
 def main_ped_callback(channel):
     global main_ped_requested
-    print(f"\n[Model 2] Main road pedestrian button (GPIO {channel}) pressed!")
+    print(f"\nMain button (GPIO {channel}) pressed")
     main_ped_requested = True
 
 def cross_ped_callback(channel):
     global cross_ped_requested
-    print(f"\n[Model 2] Crossroad pedestrian button (GPIO {channel}) pressed!")
+    print(f"\nCrossroad button (GPIO {channel}) pressed")
     cross_ped_requested = True
 
 def setup():
